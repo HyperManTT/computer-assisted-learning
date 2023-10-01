@@ -6,6 +6,7 @@ import pickle
 class CandidateDbInterface:
     """
     Interface for Candidate and Redis
+    We can use any DB interface here
     """
 
     def __init__(self, candidate_id, prepend_string="trivia"):
