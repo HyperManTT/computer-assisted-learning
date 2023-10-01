@@ -7,12 +7,15 @@ class CandidateDbInterface:
     """
     Interface for Candidate and Redis
     """
+
     def __init__(self, candidate_id, prepend_string="trivia"):
         self.host = config.REDIS_HOST
         self.port = config.REDIS_PORT
         self.password = config.REDIS_PASS
         self.candidate_id = candidate_id
-        self.r = redis.StrictRedis(host=self.host, password=self.password, port=self.port, ssl=True)
+        self.r = redis.StrictRedis(
+            host=self.host, password=self.password, port=self.port, ssl=True
+        )
         self.prepend_string = prepend_string
         self.redis_key = f"{self.prepend_string}_candidate_{candidate_id}"
 
@@ -53,6 +56,3 @@ class CandidateDbInterface:
         except Exception as err:
             print(err)
             return False
-
-
-

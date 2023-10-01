@@ -14,13 +14,15 @@ def get_question_parameters():
     """
     question_parameters = []
     for q in questions:
-        question_parameters.append([
-            q['parameters']['discrimination'],
-            q['parameters']['difficulty'],
-            q['parameters']['pseudo-guessing'],
-            q['parameters']['upper-asymptote'],
-            q['parameters']['item-count']
-        ])
+        question_parameters.append(
+            [
+                q["parameters"]["discrimination"],
+                q["parameters"]["difficulty"],
+                q["parameters"]["pseudo-guessing"],
+                q["parameters"]["upper-asymptote"],
+                q["parameters"]["item-count"],
+            ]
+        )
     return question_parameters
 
 
@@ -55,6 +57,7 @@ class Candidate:
     """
     Candidate class representing a test/trivia taker.
     """
+
     def __init__(self, _id, question_parameters):
         self.id = _id
         self.responses = []
@@ -68,8 +71,12 @@ class Candidate:
         self.new_theta = self.est_theta
 
     def get_new_theta(self):
-        self.new_theta = self.estimator.estimate(items=self.items, administered_items=self.administered_items,
-                                                 response_vector=self.responses, est_theta=self.est_theta)
+        self.new_theta = self.estimator.estimate(
+            items=self.items,
+            administered_items=self.administered_items,
+            response_vector=self.responses,
+            est_theta=self.est_theta,
+        )
         return self.new_theta
 
     def get_next_question(self):
@@ -81,8 +88,11 @@ class Candidate:
             self.get_new_theta()
         if len(self.responses) != 0:
             self.new_theta = self.get_new_theta()
-        question_index = self.selector.select(items=self.items, administered_items=self.administered_items,
-                                              est_theta=self.new_theta)
+        question_index = self.selector.select(
+            items=self.items,
+            administered_items=self.administered_items,
+            est_theta=self.new_theta,
+        )
         return question_index
 
     def store_result(self, question: int, result: bool):
@@ -123,13 +133,15 @@ class Candidate:
 # ###################################### Sample Usage ######################################
 
 # Get question parameters and convert to numpy array
-question_params = get_question_parameters()  # This can be done on the client side - fetch question parameters
+question_params = (
+    get_question_parameters()
+)  # This can be done on the client side - fetch question parameters
 bank_size = len(question_params)
 question_params = numpy.array(question_params)
 # question_params = generate_item_bank(3)
 
 # Try to get candidate and if they aren't present, create one
-username = 'rram'
+username = "rram"
 candidate = get_user_profile(username)
 if not candidate:
     print("Creating candidate")
@@ -141,7 +153,7 @@ else:
     print(candidate.responses)
     print("Found user in storage.")
 
-# Simulate getting the next question to ask and storing the results in the user profile
+# Using random to simulate getting the next question to ask and storing the results in the user profile
 import random
 
 # Iterate over the remaining questions and get the next question
@@ -158,4 +170,3 @@ store_user_profile(candidate)
 # Delete user from database
 print("Deleting user")
 delete_user_profile(username)
-
